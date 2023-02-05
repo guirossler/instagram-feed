@@ -6,7 +6,7 @@ require_once "Config.php";
 class InstagramFeed extends Config {
 
     protected function request($path) {
-        return json_decode(file_get_contents($path), true); 
+        return json_decode(file_get_contents($path), true);
     }
 
     protected function refreshToken() {
@@ -21,7 +21,7 @@ class InstagramFeed extends Config {
             fwrite($fp, json_encode($array));
             fclose($fp);
         }
-        
+
         $date_json = $this->request("$path/$filename")["updated"];
 
         if (strtotime($date) - strtotime($date_json) > 86400) {
@@ -31,12 +31,12 @@ class InstagramFeed extends Config {
             fwrite($fp, json_encode($array));
             fclose($fp);
         }
-        
+
     }
 
     function getFeed() {
         $this->refreshToken();
-        return $this->request("https://graph.instagram.com/me/media?fields=username,permalink,timestamp,caption&access_token=" . $this->getToken())["data"];
+        return $this->request("https://graph.instagram.com/me/media?fields=username,permalink,timestamp,caption,media_url&access_token=" . $this->getToken())["data"];
     }
 }
 ?>
